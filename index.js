@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
-const username = //username as string;
-const password = //password as string;
+const username = //add username here as string
+const password = //add password here as string
 //this determins if you want it to run headless. 
 //False will cause it to run such that you can see it pop up on your screen
 //True will cause it to run silently in the background
@@ -23,6 +23,7 @@ const checkin = async (checker, name) =>{
             await page.click("!!!!!!!!!!!!!!!");
             checker = true;
             console.log(`${name} checkin has been completed`)
+            browser.close();
         }
     });
     await page.goto("https://progress.appacademy.io/students/auth/github");
@@ -52,13 +53,13 @@ const dateChecker = () =>{
     const minutes = date.getUTCMinutes();
 
 
-    if(!morningCheckin && (hours === 15 && minutes < 5)){
+    if(!morningCheckin && ((hours === 14 && minutes > 55)||(hours === 15 && minutes < 3))){
         checkin(morningCheckin, "Morning");
         return;
-    } else if(!lunchCheckin && (hours === 19 && minutes > 30 && minutes < 35)){
+    } else if(!lunchCheckin && ((hours === 19 && minutes > 25)&&(hours === 19 && minutes < 35))){
         checkin(lunchCheckin, "Lunch");
         return;
-    } else if(!afternoonCheckin && (hours === 22 && minutes < 5)){
+    } else if(!afternoonCheckin && ((hours === 21 && minutes > 55)||(hours === 22 && minutes < 3))){
         checkin(afternoonCheckin, "Afternoon");
         return;
     }
