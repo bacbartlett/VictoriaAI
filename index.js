@@ -20,10 +20,16 @@ const checkin = async (checker, name) =>{
     page.on("domcontentloaded", async ()=>{
         console.log(page.url())
         if(page.url() === "https://progress.appacademy.io/me"){
-            await page.click("!!!!!!!!!!!!!!!");
+            try{
+            await page.click(".student-check-in-form button");
             checker = true;
             console.log(`${name} checkin has been completed`)
             browser.close();
+            } catch(e){
+                console.log(e);
+                console.log("Could not find the checkin button. Please click manually")
+            }
+            
         }
     });
     await page.goto("https://progress.appacademy.io/students/auth/github");
@@ -67,3 +73,4 @@ const dateChecker = () =>{
 }
 
 setInterval(dateChecker, 120000);
+console.log("Automatic checkin is running");
