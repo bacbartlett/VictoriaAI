@@ -9,9 +9,9 @@ const headless = false;
 
 
 let lastRunDate = new Date();
-let morningCheckin = false;
-let lunchCheckin = false;
-let afternoonCheckin = false;
+let morningCheckin = {done:false};
+let lunchCheckin = {done:false};
+let afternoonCheckin = {done:false};
 
 const checkin = async (checker, name) =>{
     console.log("test")
@@ -22,7 +22,7 @@ const checkin = async (checker, name) =>{
         if(page.url() === "https://progress.appacademy.io/me"){
             try{
             await page.click(".student-check-in-form button");
-            checker = true;
+            checker.done = true;
             console.log(`${name} checkin has been completed`)
             browser.close();
             } catch(e){
@@ -39,9 +39,9 @@ const checkin = async (checker, name) =>{
 }
 
 const setToFalse = () =>{
-    morningCheckin = false;
-    lunchCheckin = false;
-    afternoonCheckin = false;
+    morningCheckin.done = false;
+    lunchCheckin.done = false;
+    afternoonCheckin.done = false;
 }
 
 const dateChecker = () =>{
@@ -59,13 +59,13 @@ const dateChecker = () =>{
     const minutes = date.getUTCMinutes();
 
 
-    if(!morningCheckin && ((hours === 14 && minutes > 55)||(hours === 15 && minutes < 3))){
+    if(!morningCheckin.done && ((hours === 14 && minutes > 55)||(hours === 15 && minutes < 3))){
         checkin(morningCheckin, "Morning");
         return;
-    } else if(!lunchCheckin && ((hours === 19 && minutes > 25)&&(hours === 19 && minutes < 35))){
+    } else if(!lunchCheckin.done && ((hours === 19 && minutes > 25)&&(hours === 19 && minutes < 35))){
         checkin(lunchCheckin, "Lunch");
         return;
-    } else if(!afternoonCheckin && ((hours === 21 && minutes > 55)||(hours === 22 && minutes < 3))){
+    } else if(!afternoonCheckin.done && ((hours === 21 && minutes > 55)||(hours === 22 && minutes < 3))){
         checkin(afternoonCheckin, "Afternoon");
         return;
     }
