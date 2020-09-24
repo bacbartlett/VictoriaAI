@@ -8,7 +8,12 @@ const setup = ()=>{
     app.use(express.urlencoded());
 
     app.get("/", (req, res) =>{
-        res.sendFile(__dirname+"\\form.html");
+        if(process.platform.includes("win")){
+            res.sendFile(__dirname+"\\form.html");
+        } else{
+            res.sendFile(__dirname+"/form.html");
+        }
+        
     })
 
     app.post("/config", (req, res) => {
