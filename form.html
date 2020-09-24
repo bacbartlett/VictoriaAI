@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Automatic Checkin</title>
+</head>
+<body>
+    <h2>App Academy uses github to log you into progress track</h2>
+    <h2>Input github info below. This information is stored only on your computer</h2>
+    <form action="/config" method="post">
+        <label for="username">Username for github</label>
+        <input required type="text" name="username" id="username">
+        <label for="password">Password for github</label>
+        <input required type="password" name="password" id="password">
+        <label for="headless">Run program headless</label>
+        <input type="checkbox" name="headless" id="headless" checked>
+        <label for="test">Run test on sucessful configure</label>
+        <input type="checkbox" name="test" id="test" checked>
+        <button type="submit">Save Config Info</button>
+    </form>
+</body>
+</html>

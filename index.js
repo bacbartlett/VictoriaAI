@@ -1,24 +1,63 @@
 const puppeteer = require("puppeteer");
-const username = //add username here as string
-const password = //add password here as string
-//this determins if you want it to run headless. 
-//False will cause it to run such that you can see it pop up on your screen
-//True will cause it to run silently in the background
-//Either way, the console will log the fact that you were checked in
-const headless = false;
-
+const {setup} = require("./setup.js")
+const fs = require("fs");
+const settings = {username:"needsconfig", password:"needsconfig", headless:false, test:true};
+let needsConfig = false;
 
 let lastRunDate = new Date();
 let morningCheckin = {done:false};
 let lunchCheckin = {done:false};
 let afternoonCheckin = {done:false};
 
-const checkin = async (checker, name) =>{
-    console.log("test")
-    const browser = await puppeteer.launch({headless: headless});
+const checkConfig = async (settings) => {
+    if(needsConfig || (settings.username === "needsconfig" || settings.password === "needsconfig")){
+        setup();
+        const browser = await puppeteer.launch({headless: false});
+        const page = await browser.newPage();
+        await page.goto("http://localhost:3333/")
+        page.on("close", ()=>{
+            console.log("Refreshing settings")
+            readConfig(settings)
+        });
+    }
+}
+
+const readConfig = (settings) =>{
+    fs.readFile("./config.json", "utf-8", (err, data) =>{
+        try{newSettings = JSON.parse(data);
+            settings.username = newSettings.username;
+            settings.password = newSettings.password;
+            settings.headless = newSettings.headless;
+            settings.test = newSettings.test;
+            console.log("Configure sucessful. Automatic checkin is running")
+            if(settings.test){
+                checkin(null, null, true)
+            }
+        }catch(e){
+            console.log("Configure file missing. Running configurer process");
+            needsConfig = true;
+            checkConfig(settings)
+        }
+    })
+}
+
+const setTestToFalse = () =>{
+    settings.test = false;
+    fs.writeFile("./config.json", JSON.stringify(settings), ()=>{
+        return;
+    })
+}
+
+const checkin = async (checker, name, test = false) =>{
+    let browser;
+    if(test){
+        browser = await puppeteer.launch({headless: false});
+        setTestToFalse();
+    }else{
+        browser = await puppeteer.launch({headless: settings.headless});
+    }
     const page = await browser.newPage();
     page.on("domcontentloaded", async ()=>{
-        console.log(page.url())
         if(page.url() === "https://progress.appacademy.io/me"){
             try{
             await page.click(".student-check-in-form button");
@@ -26,15 +65,19 @@ const checkin = async (checker, name) =>{
             console.log(`${name} checkin has been completed`)
             browser.close();
             } catch(e){
-                console.log(e);
-                console.log("Could not find the checkin button. Please click manually")
+                if(test){
+                    console.log("Test sucessful. Please close browser")
+                } else{
+                    console.log(e);
+                    console.log("Could not find the checkin button. Please click manually")
+                }
             }
             
         }
     });
     await page.goto("https://progress.appacademy.io/students/auth/github");
-    await page.type("#login_field", username, {delay: 100});
-    await page.type("#password", password, {delay: 50});
+    await page.type("#login_field", settings.username, {delay: 100});
+    await page.type("#password", settings.password, {delay: 50});
     await page.click(".btn-primary");
 }
 
@@ -72,5 +115,6 @@ const dateChecker = () =>{
 
 }
 
+readConfig(settings)
 setInterval(dateChecker, 120000);
-console.log("Automatic checkin is running");
+
