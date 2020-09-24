@@ -4,7 +4,9 @@
   "description": "checkin to app academy automatically",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "config": "node configCommand.js"
   },
   "author": "bacbartlett",
   "license": "ISC",
