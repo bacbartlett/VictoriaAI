@@ -19,7 +19,7 @@ Use:
 
 On first use, Chromium will open up a window so that you can configure your settings. Because App Academy uses github to log students in, you will provide your credentials there. ALL INFORMATION IS STORED ONLY ON YOUR MACHINE AND IS NEVER ACCESSED BESIDES TO LOG YOU IN.
 
-This application can be run headlessly or not. If headless, the application will check you in without any visible Chromium window opening up. If not headless, Chromium will open upon launch and close again after check in. 
+(The following feature is still in developement. It is not currently availible)This application can be run headlessly or not. If headless, the application will check you in without any visible Chromium window opening up. If not headless, Chromium will open upon launch and close again after check in. 
 Either way, a message will print out in the terminal confirming that you were checked in.
 
 
