@@ -73,7 +73,7 @@ const main = (forceConfig = false)=>{
                 await page.click(".student-check-in-form button");
                 checker.done = true;
                 console.log(`${name} checkin has been completed`)
-                browser.close();
+                setTimeout(async function(){browser.close();}, 2000)
                 } catch(e){
                     if(test){
                         console.log("Test sucessful. Please close browser")
