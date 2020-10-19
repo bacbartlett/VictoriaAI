@@ -8,7 +8,7 @@ const setup = ()=>{
     app.use(express.urlencoded());
 
     app.get("/", (req, res) =>{
-        if(process.platform.includes("win")){
+        if(process.platform.startsWith("win")){
             res.sendFile(__dirname+"\\form.html");
         } else{
             res.sendFile(__dirname+"/form.html");
